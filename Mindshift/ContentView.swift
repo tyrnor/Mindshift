@@ -10,9 +10,11 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var shouldWin = false
+    @State private var move = getMove()
     
     var body: some View {
         VStack {
+            Text("\(move.rawValue)")
             if shouldWin {
                 Text("You have to win")
             } else {
@@ -21,6 +23,12 @@ struct ContentView: View {
         }
         .padding()
     }
+}
+
+func getMove() -> Move {
+    guard let move = Move.allCases.randomElement() else { return Move.paper
+    }
+    return move
 }
 
 #Preview {
