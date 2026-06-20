@@ -10,12 +10,14 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var shouldWin = false
-    @State private var move = getMove()
+    @State private var move = Move.random()
     @State private var hasResponded = false
-    @State private var result: String = ""
+    @State private var result: Bool = false
+    @State private var score = 0
     
     var body: some View {
         VStack {
+            Text("Current score: \(score)")
             Text("My move is \(move.rawValue) and")
             if shouldWin {
                 Text("you have to win")
@@ -24,25 +26,26 @@ struct ContentView: View {
             }
             Text("Which move should you pick?")
             Button() {
-                result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.rock)
-                hasResponded.toggle()
+                answerSelected(.rock)
             } label : {
                 Text("Rock")
             }
             Button() {
-                result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.scissors)
-                hasResponded.toggle()
+                answerSelected(.scissors)
             } label : {
                 Text("Scissors")
             }
             Button() {
-                result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.paper)
-                hasResponded.toggle()
+                answerSelected(.paper)
             } label : {
                 Text("Paper")
             }
             if hasResponded {
-                Text(result)
+                if result {
+                    Text("Correct!")
+                } else {
+                    Text("Wrong!")
+                }
                 Button() {
                     move = getMove()
                     shouldWin.toggle()
@@ -53,38 +56,42 @@ struct ContentView: View {
             }
         }
     }
-}
-
-func getMove() -> Move {
-    guard let move = Move.allCases.randomElement() else { return Move.paper
-    }
-    return move
-}
-
-func getWinningMove(_ move: Move, _ shouldWin: Bool) -> Move {
-    if shouldWin {
-        switch move {
-        case .rock: return .paper
-        case .paper: return .scissors
-        case .scissors: return .rock
-        }
-    } else {
-        switch move {
-        case .rock: return .scissors
-        case .paper: return .rock
-        case .scissors: return .paper
+    
+    func getWinningMove(_ move: Move, _ shouldWin: Bool) -> Move {
+        if shouldWin {
+            switch move {
+            case .rock: return .paper
+            case .paper: return .scissors
+            case .scissors: return .rock
+            }
+        } else {
+            switch move {
+            case .rock: return .scissors
+            case .paper: return .rock
+            case .scissors: return .paper
+            }
         }
     }
-}
 
-func checkAnswer(currentMove: Move, shouldWin: Bool, clickedMove: Move) -> String{
-    let winningMove = getWinningMove(currentMove, shouldWin)
-    if clickedMove == winningMove {
-        return "Correct!"
-    } else {
-        return "Wrong!"
+    func checkAnswer(currentMove: Move, shouldWin: Bool, clickedMove: Move) -> Bool{
+        let winningMove = getWinningMove(currentMove, shouldWin)
+        if clickedMove == winningMove {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func answerSelected(_ clickedMove: Move) {
+        result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: clickedMove)
+        if result {
+            score += 1
+        }
+        hasResponded.toggle()
     }
 }
+
+
 
 #Preview {
     ContentView()
