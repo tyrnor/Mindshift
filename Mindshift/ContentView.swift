@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var shouldWin = false
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if shouldWin {
+                Text("You have to win")
+            } else {
+                Text("You have to lose")
+            }
         }
         .padding()
     }
