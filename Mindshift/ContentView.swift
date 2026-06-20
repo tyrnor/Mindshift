@@ -11,6 +11,8 @@ struct ContentView: View {
     
     @State private var shouldWin = false
     @State private var move = getMove()
+    @State private var hasResponded = false
+    @State private var result: String = ""
     
     var body: some View {
         VStack {
@@ -21,17 +23,35 @@ struct ContentView: View {
                 Text("you have to lose")
             }
             Text("Which move should you pick?")
-            Button("Rock") {
-                checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.rock)
+            Button() {
+                result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.rock)
+                hasResponded.toggle()
+            } label : {
+                Text("Rock")
             }
-            Button("Scissors") {
-                checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.scissors)
+            Button() {
+                result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.scissors)
+                hasResponded.toggle()
+            } label : {
+                Text("Scissors")
             }
-            Button("Paper") {
-                checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.paper)
+            Button() {
+                result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.paper)
+                hasResponded.toggle()
+            } label : {
+                Text("Paper")
+            }
+            if hasResponded {
+                Text(result)
+                Button() {
+                    move = getMove()
+                    shouldWin.toggle()
+                    hasResponded.toggle()
+                } label: {
+                    Text("Next")
+                }
             }
         }
-        .padding()
     }
 }
 
@@ -57,12 +77,12 @@ func getWinningMove(_ move: Move, _ shouldWin: Bool) -> Move {
     }
 }
 
-func checkAnswer(currentMove: Move, shouldWin: Bool, clickedMove: Move) {
+func checkAnswer(currentMove: Move, shouldWin: Bool, clickedMove: Move) -> String{
     let winningMove = getWinningMove(currentMove, shouldWin)
     if clickedMove == winningMove {
-        print("Correct!")
+        return "Correct!"
     } else {
-        print("Wrong!")
+        return "Wrong!"
     }
 }
 
