@@ -11,33 +11,24 @@ struct ContentView: View {
     
     @State private var shouldWin = false
     @State private var move = getMove()
-    @State private var winningMove: Move?
     
     var body: some View {
         VStack {
-            Text("\(move.rawValue)")
+            Text("My move is \(move.rawValue) and")
             if shouldWin {
-                Text("You have to win")
+                Text("you have to win")
             } else {
-                Text("You have to lose")
+                Text("you have to lose")
             }
+            Text("Which move should you pick?")
             Button("Rock") {
-                winningMove = getWinningMove(move, shouldWin)
-                if winningMove == Move.rock {
-                    print("You win!")
-                }
+                checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.rock)
             }
             Button("Scissors") {
-                winningMove = getWinningMove(move, shouldWin)
-                if winningMove == Move.scissors {
-                    print("You win!")
-                }
+                checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.scissors)
             }
             Button("Paper") {
-                winningMove = getWinningMove(move, shouldWin)
-                if winningMove == Move.paper {
-                    print("You win!")
-                }
+                checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: Move.paper)
             }
         }
         .padding()
@@ -63,6 +54,15 @@ func getWinningMove(_ move: Move, _ shouldWin: Bool) -> Move {
         case .paper: return .rock
         case .scissors: return .paper
         }
+    }
+}
+
+func checkAnswer(currentMove: Move, shouldWin: Bool, clickedMove: Move) {
+    let winningMove = getWinningMove(currentMove, shouldWin)
+    if clickedMove == winningMove {
+        print("Correct!")
+    } else {
+        print("Wrong!")
     }
 }
 
