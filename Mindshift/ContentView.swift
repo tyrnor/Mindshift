@@ -28,18 +28,21 @@ struct ContentView: View {
             Button() {
                 answerSelected(.rock)
             } label : {
-                Text("Rock")
+                Text("🪨 Rock")
             }
+            .disabled(hasResponded)
             Button() {
                 answerSelected(.scissors)
             } label : {
-                Text("Scissors")
+                Text("✂️ Scissors")
             }
+            .disabled(hasResponded)
             Button() {
                 answerSelected(.paper)
             } label : {
-                Text("Paper")
+                Text("📃 Paper")
             }
+            .disabled(hasResponded)
             if hasResponded {
                 if result {
                     Text("Correct!")
@@ -47,7 +50,7 @@ struct ContentView: View {
                     Text("Wrong!")
                 }
                 Button() {
-                    move = getMove()
+                    move = Move.random()
                     shouldWin.toggle()
                     hasResponded.toggle()
                 } label: {
@@ -86,6 +89,10 @@ struct ContentView: View {
         result = checkAnswer(currentMove: move, shouldWin: shouldWin, clickedMove: clickedMove)
         if result {
             score += 1
+        } else {
+            if score > 0 {
+                score -= 1
+            }
         }
         hasResponded.toggle()
     }
