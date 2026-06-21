@@ -52,12 +52,13 @@ struct ContentView: View {
                     Text("Wrong!")
                 }
                 Button() {
-                    move = Move.random()
-                    shouldWin.toggle()
-                    hasResponded.toggle()
                     gamesLeft -= 1
                     if gamesLeft == 0 {
                         showAlert.toggle()
+                    } else {
+                        move = Move.random()
+                        shouldWin.toggle()
+                        hasResponded.toggle()
                     }
                 } label: {
                     Text("Next")
