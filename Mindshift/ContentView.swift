@@ -14,6 +14,8 @@ struct ContentView: View {
     @State private var hasResponded = false
     @State private var result: Bool = false
     @State private var score = 0
+    @State private var gamesLeft = 10
+    @State private var showAlert = false
     
     var body: some View {
         VStack {
@@ -53,11 +55,28 @@ struct ContentView: View {
                     move = Move.random()
                     shouldWin.toggle()
                     hasResponded.toggle()
+                    gamesLeft -= 1
+                    if gamesLeft == 0 {
+                        showAlert.toggle()
+                    }
                 } label: {
                     Text("Next")
                 }
             }
         }
+        .alert("Final score", isPresented: $showAlert) {
+            Button("Reset game") {
+                move = Move.random()
+                shouldWin.toggle()
+                hasResponded = false
+                score = 0
+                gamesLeft = 10
+            }
+            
+        } message: {
+            Text("Your final score is \(score)")
+        }
+
     }
     
     func getWinningMove(_ move: Move, _ shouldWin: Bool) -> Move {
